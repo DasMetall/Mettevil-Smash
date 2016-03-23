@@ -20,6 +20,8 @@ public abstract class CollisionObject {
     
     public abstract boolean containsPoint(Vector vector);
 
+    public abstract boolean isNear(Vector vector);
+    
     /**
      * @return the centerPoint
      */
@@ -33,10 +35,17 @@ public abstract class CollisionObject {
     public final void setCenterPoint(Vector centerPoint) {
         if (centerPoint==null) throw new IllegalArgumentException();
         this.centerPoint = centerPoint;
+        moveCenter();
     }
     
     public final void moveCenterPoint(Vector movement) {
         if (movement==null) throw new IllegalArgumentException();
         this.centerPoint = this.centerPoint.add(movement);
+        movePoints(movement);
+        moveCenter();
     }
+    
+    protected void movePoints(Vector movement) {}
+    
+    protected void moveCenter() {}
 }

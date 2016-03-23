@@ -32,7 +32,7 @@ public class Vector {
         return new Vector(this.x - other.x, this.y - other.y);
     }
 
-    public Vector neg(Vector other) {
+    public Vector neg() {
         return new Vector(-this.x, -this.y);
     }
 
@@ -55,6 +55,12 @@ public class Vector {
     public float angle(Vector second) {
         return (float)Math.acos(this.mul(second) / (this.length() * second.
                 length()));
+    }
+
+    public Vector turn(float angle) {
+        angle += (float)Math.atan2(y, x);
+        float r = length();
+        return new Vector(r * (float)Math.cos(angle), r * (float)Math.sin(angle));
     }
 
     @Override
@@ -90,5 +96,18 @@ public class Vector {
             return false;
         float r = (h1.x - g1.x + s * hd.x) / gd.x;
         return r >= 0 && r <= 1;
+    }
+
+    public static Vector getCutPosition(Vector g1, Vector g2, Vector h1,
+            Vector h2) {
+        Vector gd = g2.sub(g1),
+                hd = h2.sub(h1);
+        if (gd.mul(hd) == 1)
+            return null;
+        float d = hd.y * gd.x - hd.x * gd.y;
+        if (d == 0)
+            return null;
+        float s = (gd.x * (g1.y - h1.y) - gd.y * (g1.x - h1.x)) / d;
+        return h1.add(hd.mul(s));
     }
 }

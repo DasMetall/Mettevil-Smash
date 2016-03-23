@@ -50,6 +50,11 @@ public class CollisionCircle extends CollisionObject {
         return vector.sub(super.getCenterPoint()).lengthSqr() <= radius * radius;
     }
 
+    @Override
+    public boolean isNear(Vector vector) {
+        return vector.sub(super.getCenterPoint()).lengthSqr() <= radius * radius;
+    }
+
     /**
      * @return the radius
      */

@@ -47,6 +47,12 @@ public class CollisionRectangle extends CollisionObject {
                 && p1.y <= vector.y && p2.y >= vector.y;
     }
 
+    @Override
+    public boolean isNear(Vector vector) {
+        return vector.sub(super.getCenterPoint()).lengthSqr() <= halfSize().
+                lengthSqr();
+    }
+
     /**
      * @return the size
      */
