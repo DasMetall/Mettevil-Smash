@@ -51,7 +51,12 @@ public class Vector {
     public float lengthSqr() {
         return this.x * this.x + this.y * this.y;
     }
-    
+
+    public float angle(Vector second) {
+        return (float)Math.acos(this.mul(second) / (this.length() * second.
+                length()));
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Vector))
@@ -60,7 +65,30 @@ public class Vector {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Float.floatToIntBits(this.x);
+        hash = 61 * hash + Float.floatToIntBits(this.y);
+        return hash;
+    }
+
+    @Override
     public String toString() {
         return "{" + this.x + "; " + this.y + "}";
+    }
+
+    public static boolean cutLines(Vector g1, Vector g2, Vector h1, Vector h2) {
+        Vector gd = g2.sub(g1),
+                hd = h2.sub(h1);
+        if (gd.mul(hd) == 1)
+            return false;
+        float d = hd.y * gd.x - hd.x * gd.y;
+        if (d == 0)
+            return false;
+        float s = (gd.x * (g1.y - h1.y) - gd.y * (g1.x - h1.x)) / d;
+        if (s < 0 || s > 1)
+            return false;
+        float r = (h1.x - g1.x + s * hd.x) / gd.x;
+        return r >= 0 && r <= 1;
     }
 }

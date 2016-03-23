@@ -20,10 +20,20 @@ public class CollisionRectangle extends CollisionObject {
 
     @Override
     public boolean collide(Vector start, Vector end, boolean fastCheck) {
-        if (containsPoint(start)||containsPoint(end)) return true;
-        if (fastCheck) return false;
-        //... genaue Überprüfung
-        return false;
+        if (containsPoint(start) || containsPoint(end))
+            return true;
+        if (fastCheck)
+            return false;
+        Vector half = halfSize();
+        Vector center = super.getCenterPoint();
+        Vector hinv = new Vector(half.x, -half.y);
+        return Vector.cutLines(start, end, center.add(half), center.add(hinv))
+                || Vector.cutLines(start, end, center.add(hinv), center.
+                                   sub(half))
+                || Vector.cutLines(start, end, center.sub(half), center.
+                                   sub(hinv))
+                || Vector.cutLines(start, end, center.sub(hinv), center.
+                                   add(half));
     }
 
     @Override
