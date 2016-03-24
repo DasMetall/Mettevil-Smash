@@ -71,6 +71,40 @@ public class CollisionTriangle extends CollisionObject {
         setRadius();
     }
     
+    @Override
+    public CollisionData getCollisionData(Vector start, Vector end) {
+        Vector _pos = null;
+        int best = -1;
+        Vector[][] data = {
+            {p1, p2},
+            {p2, p3},
+            {p3, p1}
+        };
+
+        for (int i = 0; i < data.length; ++i) {
+            Vector pos = Vector.getCutPosition(start, end, data[i][0],
+                                               data[i][1]);
+            if (pos == null)
+                continue;
+            if (_pos != null)
+                if (_pos.sub(start).lengthSqr() < pos.sub(start).lengthSqr())
+                    continue;
+            _pos = pos;
+            best = i;
+        }
+
+        if (_pos == null)
+            return new CollisionData(this, this, start, end);
+        else {
+            Vector dir = Vector.getReflectDirection(end.sub(start),
+                                                    data[best][1].sub(
+                                                            data[best][0]));
+            return new CollisionData(this, this, start, end, _pos,
+                                     _pos.add(dir.mul(end.sub(start).length()
+                                             - _pos.sub(start).length())));
+        }
+    }
+    
     private float angleSqrNoCos(Vector a, Vector b) {
         float v = a.mul(b);
         return v * v / (a.lengthSqr() * b.lengthSqr());

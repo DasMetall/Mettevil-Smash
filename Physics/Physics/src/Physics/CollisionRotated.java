@@ -37,6 +37,14 @@ public class CollisionRotated extends CollisionObject {
         return getCollision().isNear(transformToLocal(vector));
     }
 
+    @Override
+    public CollisionData getCollisionData(Vector start, Vector end) {
+        CollisionData data = collision.getCollisionData(transformToLocal(start),
+                                                        transformToLocal(end));
+        data.setCollisionOwner(this);
+        return data;
+    }
+
     protected Vector transformToLocal(Vector global) {
         return global.sub(super.getCenterPoint()).turn(getAngle());
     }

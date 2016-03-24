@@ -55,6 +55,40 @@ public class CollisionCircle extends CollisionObject {
         return vector.sub(super.getCenterPoint()).lengthSqr() <= radius * radius;
     }
 
+    @Override
+    public CollisionData getCollisionData(Vector start, Vector end) {
+        Vector b = end.sub(start);
+        Vector m = super.getCenterPoint();
+        Vector a = start;
+
+        float d = b.x * b.x * b.y * b.y;
+        if (d == 0)
+            return new CollisionData(this, this, start, end);
+        float p = (b.x * (a.x - m.x) + b.y * (a.y - m.y)) / d;
+        float q = ((a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y) - radius * radius) / d;
+        float rad = p * p / 4 - q;
+        if (rad < 0)
+            return new CollisionData(this, this, start, end);
+        rad = (float)Math.sqrt(rad);
+
+        float _s = 2;
+        float s = -p / 2 - rad;
+        if (s >= 0 && s <= 1)
+            _s = s;
+
+        s = -p / 2 + rad;
+        if (s >= 0 && s <= 1 && s < _s)
+            _s = s;
+
+        if (_s == 2)
+            return new CollisionData(this, this, start, end);
+        Vector pos = start.add(b.mul(_s));
+        Vector dir = Vector.getReflectDirection(b, pos.sub(m).normal());
+        return new CollisionData(this, this, start, end, pos,
+                                 pos.add(dir.mul(b.length()
+                                         - pos.sub(start).length())));
+    }
+
     /**
      * @return the radius
      */

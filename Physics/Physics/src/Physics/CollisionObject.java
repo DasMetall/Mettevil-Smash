@@ -22,6 +22,8 @@ public abstract class CollisionObject {
 
     public abstract boolean isNear(Vector vector);
     
+    public abstract CollisionData getCollisionData(Vector start, Vector end);
+    
     /**
      * @return the centerPoint
      */

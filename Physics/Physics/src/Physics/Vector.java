@@ -63,6 +63,14 @@ public class Vector {
         return new Vector(r * (float)Math.cos(angle), r * (float)Math.sin(angle));
     }
 
+    public Vector unit() {
+        return this.mul(1 / this.length());
+    }
+
+    public Vector normal() {
+        return new Vector(y, -x);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Vector))
@@ -110,4 +118,23 @@ public class Vector {
         float s = (gd.x * (g1.y - h1.y) - gd.y * (g1.x - h1.x)) / d;
         return h1.add(hd.mul(s));
     }
+
+    public static Vector getReflectDirection(Vector movement, Vector axis) {
+        if (movement.lengthSqr() != 1)
+            movement = movement.unit();
+        if (axis.lengthSqr() != 1)
+            axis = axis.unit();
+        float s = (movement.x * axis.y - axis.x * movement.y) / axis.lengthSqr();
+        float r = axis.x != 0 ? (movement.x - s * axis.y) / axis.x
+                : (movement.y + s * axis.x) / axis.y;
+        float angle = (float)Math.atan2(s, r);
+        return movement.turn(angle < Math.PI / 2 ? -2 * angle
+                : angle < Math.PI ? +2 * ((float)Math.PI - angle)
+                        : angle < Math.PI * 1.5 ? -2 * (angle - (float)Math.PI)
+                                : +2 * (2 * (float)Math.PI - angle));
+    }
+
+    public static final Vector UNITX = new Vector(1, 0);
+
+    public static final Vector UNITY = new Vector(0, 1);
 }
