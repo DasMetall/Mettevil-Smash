@@ -27,20 +27,31 @@ public class CollisionCircle extends CollisionObject {
         Vector b = end.sub(start);
         Vector m = super.getCenterPoint();
         Vector a = start;
-        float d = b.x * b.x * b.y * b.y;
-        if (d == 0)
+        float ph = b.x * (a.x - m.x) + b.y * (a.y - m.y);
+        float q = (a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y);
+        float d = ph * ph - q;
+        if (d < 0)
             return false;
-        float p = (b.x * (a.x - m.x) + b.y * (a.y - m.y)) / d;
-        float q = ((a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y) - radius * radius) / d;
-        float rad = p * p / 4 - q;
-        if (rad < 0)
-            return false;
-        rad = (float)Math.sqrt(rad);
-        float s = -p / 2 - rad;
+        d = (float)Math.sqrt(d);
+        float s = -ph - d;
         if (s >= 0 && s <= 1)
             return true;
-        s = -p / 2 + rad;
+        s = -ph + d;
         return s >= 0 && s <= 1;
+//        float d = b.x * b.x * b.y * b.y;
+//        if (d == 0)
+//            return false;
+//        float p = (b.x * (a.x - m.x) + b.y * (a.y - m.y)) / d;
+//        float q = ((a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y) - radius * radius) / d;
+//        float rad = p * p / 4 - q;
+//        if (rad < 0)
+//            return false;
+//        rad = (float)Math.sqrt(rad);
+//        float s = -p / 2 - rad;
+//        if (s >= 0 && s <= 1)
+//            return true;
+//        s = -p / 2 + rad;
+//        return s >= 0 && s <= 1;
     }
 
     @Override
@@ -61,22 +72,28 @@ public class CollisionCircle extends CollisionObject {
         Vector m = super.getCenterPoint();
         Vector a = start;
 
-        float d = b.x * b.x * b.y * b.y;
-        if (d == 0)
-            return new CollisionData(this, this, start, end);
-        float p = (b.x * (a.x - m.x) + b.y * (a.y - m.y)) / d;
-        float q = ((a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y) - radius * radius) / d;
-        float rad = p * p / 4 - q;
-        if (rad < 0)
-            return new CollisionData(this, this, start, end);
-        rad = (float)Math.sqrt(rad);
+//        float d = b.x * b.x * b.y * b.y;
+//        if (d == 0)
+//            return new CollisionData(this, this, start, end);
+//        float p = (b.x * (a.x - m.x) + b.y * (a.y - m.y)) / d;
+//        float q = ((a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y) - radius * radius) / d;
+//        float rad = p * p / 4 - q;
+//        if (rad < 0)
+//            return new CollisionData(this, this, start, end);
+//        rad = (float)Math.sqrt(rad);
 
+        float ph = b.x * (a.x - m.x) + b.y * (a.y - m.y);
+        float q = (a.x - m.x) * (a.x - m.x) + (a.y - m.y) * (a.y - m.y);
+        float d = ph * ph - q;
+        if (d < 0)
+            return new CollisionData(this, this, start, end);
+        d = (float)Math.sqrt(d);
         float _s = 2;
-        float s = -p / 2 - rad;
+        float s = -ph - d;
         if (s >= 0 && s <= 1)
             _s = s;
 
-        s = -p / 2 + rad;
+        s = -ph + d;
         if (s >= 0 && s <= 1 && s < _s)
             _s = s;
 

@@ -41,16 +41,21 @@ public class CollisionRotated extends CollisionObject {
     public CollisionData getCollisionData(Vector start, Vector end) {
         CollisionData data = collision.getCollisionData(transformToLocal(start),
                                                         transformToLocal(end));
-        data.setCollisionOwner(this);
-        return data;
+        if (data.hasCollision())
+            return new CollisionData(data.getCollisionObject(), this, start, end, 
+                                     transformToGlobal(data.getCollisionPoint()),
+                                     transformToGlobal(data.getCollisionTarget()));
+        else return new CollisionData(data.getCollisionObject(), this, start, end);
+//        data.setCollisionOwner(this);
+//        return data;
     }
 
     protected Vector transformToLocal(Vector global) {
-        return global.sub(super.getCenterPoint()).turn(getAngle());
+        return global.sub(super.getCenterPoint()).turn(-getAngle());
     }
 
     protected Vector transformToGlobal(Vector local) {
-        return local.turn(-getAngle()).add(super.getCenterPoint());
+        return local.turn(getAngle()).add(super.getCenterPoint());
     }
 
     /**

@@ -71,7 +71,7 @@ public class CollisionRectangle extends CollisionObject {
         for (int i = 0; i < data.length; ++i) {
             Vector pos = Vector.getCutPosition(start, end,
                                                center.add(data[i][0]),
-                                               center.add(data[i][1]));
+                                               center.add(data[i][1]), true);
             if (pos == null)
                 continue;
             if (_pos != null)

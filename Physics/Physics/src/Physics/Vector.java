@@ -107,7 +107,7 @@ public class Vector {
     }
 
     public static Vector getCutPosition(Vector g1, Vector g2, Vector h1,
-            Vector h2) {
+            Vector h2, boolean limit) {
         Vector gd = g2.sub(g1),
                 hd = h2.sub(h1);
         if (gd.mul(hd) == 1)
@@ -116,6 +116,11 @@ public class Vector {
         if (d == 0)
             return null;
         float s = (gd.x * (g1.y - h1.y) - gd.y * (g1.x - h1.x)) / d;
+        if (limit) {
+            float r = (h1.x - g1.x + s * hd.x) / gd.x;
+            if (s < 0 || s > 1 || r < 0 && r > 1)
+                return null;
+        }
         return h1.add(hd.mul(s));
     }
 
@@ -124,15 +129,15 @@ public class Vector {
             movement = movement.unit();
         if (axis.lengthSqr() != 1)
             axis = axis.unit();
-        float s = (movement.x * axis.y - axis.x * movement.y) / axis.lengthSqr();
+        float s = (axis.x * movement.y - axis.y * movement.x)
+                / (-axis.x * axis.x - axis.y * axis.y);
         float r = axis.x != 0 ? (movement.x - s * axis.y) / axis.x
                 : (movement.y + s * axis.x) / axis.y;
-        float angle = (float)Math.atan2(s, r);
-        return movement.turn(angle < Math.PI / 2 ? -2 * angle
-                : angle < Math.PI ? +2 * ((float)Math.PI - angle)
-                        : angle < Math.PI * 1.5 ? -2 * (angle - (float)Math.PI)
-                                : +2 * (2 * (float)Math.PI - angle));
+        float angle = (float)Math.atan2(r, s);
+        return movement.turn((float)Math.PI - angle * 2);
     }
+
+    public static final Vector ZERO = new Vector(0, 0);
 
     public static final Vector UNITX = new Vector(1, 0);
 

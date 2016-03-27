@@ -83,7 +83,7 @@ public class CollisionTriangle extends CollisionObject {
 
         for (int i = 0; i < data.length; ++i) {
             Vector pos = Vector.getCutPosition(start, end, data[i][0],
-                                               data[i][1]);
+                                               data[i][1], true);
             if (pos == null)
                 continue;
             if (_pos != null)
@@ -120,7 +120,7 @@ public class CollisionTriangle extends CollisionObject {
     private static Vector getCenter(Vector p1, Vector p2, Vector p3) {
         Vector _p1 = p1.add(p2.sub(p1).mul(0.5f));
         Vector _p2 = p2.add(p3.sub(p1).mul(0.5f));
-        return Vector.getCutPosition(p3, _p1, p1, _p2);
+        return Vector.getCutPosition(p3, _p1, p1, _p2, false);
     }
 
     /**
