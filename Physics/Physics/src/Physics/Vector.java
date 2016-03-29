@@ -118,7 +118,7 @@ public class Vector {
         float s = (gd.x * (g1.y - h1.y) - gd.y * (g1.x - h1.x)) / d;
         if (limit) {
             float r = (h1.x - g1.x + s * hd.x) / gd.x;
-            if (s < 0 || s > 1 || r < 0 && r > 1)
+            if (s < 0 || s > 1 || r < 0 || r > 1)
                 return null;
         }
         return h1.add(hd.mul(s));
